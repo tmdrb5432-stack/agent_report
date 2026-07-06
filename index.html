@@ -301,7 +301,7 @@ body.editing *:focus{outline:1px solid var(--gold);border-radius:4px;}
 }
 </style>
 </head>
-<body>
+<body class="editing">
 <svg width="0" height="0" style="position:absolute;">
   <defs>
     <linearGradient id="mergeGrad" x1="0" y1="0" x2="0" y2="1">
@@ -608,7 +608,7 @@ body.editing *:focus{outline:1px solid var(--gold);border-radius:4px;}
   var status = document.getElementById('saveStatus');
   var STORAGE_KEY = 'agentEfficiencyReport_v1';
 
-  // 이전에 저장된 내용 자동 복원
+  // 저장된 내용 불러오기 (file:// 에서는 무시)
   try {
     var saved = localStorage.getItem(STORAGE_KEY);
     if (saved) { page.innerHTML = saved; }
@@ -633,13 +633,13 @@ body.editing *:focus{outline:1px solid var(--gold);border-radius:4px;}
 
   toggleBtn.addEventListener('click', function(){ setEditing(!editing); });
 
-  // 💾 저장 — 브라우저 localStorage에 보존 (같은 브라우저로 다시 열면 자동 복원)
+  // 💾 저장 (로컬스토리지, file://에서는 실패해도 무시)
   saveBtn.addEventListener('click', function(){
     try{
       localStorage.setItem(STORAGE_KEY, page.innerHTML);
       showStatus('저장됨 ✓');
     }catch(e){
-      showStatus('⚠ 저장 실패 — 파일로 받기를 이용하세요');
+      showStatus('⚠ 파일로 받기를 이용하세요');
     }
     dirty = false;
   });
